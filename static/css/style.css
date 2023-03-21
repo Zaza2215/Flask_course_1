@@ -1,0 +1,11 @@
+/*
+body {
+    background: #592e2f;
+    color: #b79697;
+}
+*/
+footer {
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
