@@ -45,21 +45,52 @@ def create_article():
             return redirect("/posts")
         except Exception as ex:
             print(ex)
-            return "During adding happened error!"
+            return "An error occurred while adding!"
     else:
         return render_template("create_article.html")
 
 
-@app.route("/posts/<int:id_post>")
-def post_detail(id_post):
+@app.route("/posts/<int:id_post>/update", methods=["POST", "GET"])
+def update_article(id_post):
     article = Article.query.get(id_post)
-    return render_template("post_detail.html", article=article)
+    if request.method == "POST":
+        article.title = request.form["title"]
+        article.intro = request.form["intro"]
+        article.text = request.form["text"]
+
+        try:
+            db.session.commit()
+            return redirect("/posts")
+        except Exception as ex:
+            print(ex)
+            return "An error occurred while updating!"
+    else:
+        return render_template("post_update.html", article=article)
 
 
 @app.route("/posts")
 def posts():
     articles = Article.query.order_by(Article.date.desc()).all()
     return render_template("posts.html", articles=articles)
+
+
+@app.route("/posts/<int:id_post>")
+def post_detail(id_post):
+    article = Article.query.get_or_404(id_post)
+    return render_template("post_detail.html", article=article)
+
+
+@app.route("/posts/<int:id_post>/delete")
+def post_delete(id_post):
+    article = Article.query.get_or_404(id_post)
+
+    try:
+        db.session.delete(article)
+        db.session.commit()
+        return redirect("/posts")
+    except Exception as ex:
+        print(ex)
+        return "An error occurred while deleting!"
 
 
 if __name__ == "__main__":
