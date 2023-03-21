@@ -9,3 +9,9 @@ footer {
     align-items: center;
     justify-content: center
 }
+div.main-div {
+    margin-bottom: 24px;
+}
+header {
+    margin-top: 24px;
+}
