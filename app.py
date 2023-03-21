@@ -42,12 +42,24 @@ def create_article():
         try:
             db.session.add(article)
             db.session.commit()
-            return redirect("/")
+            return redirect("/posts")
         except Exception as ex:
             print(ex)
             return "During adding happened error!"
     else:
         return render_template("create_article.html")
+
+
+@app.route("/posts/<int:id_post>")
+def post_detail(id_post):
+    article = Article.query.get(id_post)
+    return render_template("post_detail.html", article=article)
+
+
+@app.route("/posts")
+def posts():
+    articles = Article.query.order_by(Article.date.desc()).all()
+    return render_template("posts.html", articles=articles)
 
 
 if __name__ == "__main__":
